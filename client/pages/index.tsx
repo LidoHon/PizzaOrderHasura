@@ -2,6 +2,8 @@ import Image from "next/image";
 import localFont from "next/font/local";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
+import { client } from "../utils/client";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -22,41 +24,57 @@ type Data = {
   friends: Friend[];
 };
 
+const QUERY = `query {
+ friend { 
+ name 
+  } 
+ }`;
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let friends = [];
-
-  try {
-    const res = await fetch(process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string, {
-      method: 'POST',
-      headers: {
-        'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET as string,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `
-          query {
-            friend {
-              name
-            }
-          }
-        `,
-      }),
+  // let friends = [];
+  return client
+    .query(QUERY)
+    .toPromise()
+    .then((d) => {
+      return {
+        props: { friends: d.data?.friend },
+      };
+    })
+    .catch((e) => {
+      return {
+        props: {},
+      };
     });
 
-    const result = await res.json(); // Parse the response to JSON
-    const data = result?.data;
-    friends = data?.friend || []; // Ensure it's always an array
+  // try {
+  //   const res = await fetch(process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string, {
+  //     method: 'POST',
+  //     headers: {
+  //       'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET as string,
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       query: `
+  //         query {
+  //           friend {
+  //             name
+  //           }
+  //         }
+  //       `,
+  //     }),
+  //   });
 
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
+  //   const result = await res.json(); // Parse the response to JSON
+  //   const data = result?.data;
+  //   friends = data?.friend || []; // Ensure it's always an array
 
-  return {
-    props: { friends }, // Pass the friends data as props
-  };
+  // } catch (error) {
+  //   console.error('Error fetching data:', error);
+  // }
 };
 
-export default function Home({ friends }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home({
+  friends,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // Ensure friends is an array
   const friendsList = Array.isArray(friends) ? friends : [];
 
