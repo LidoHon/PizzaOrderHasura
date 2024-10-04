@@ -29,22 +29,35 @@ const QUERY = `query {
  name 
   } 
  }`;
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   // let friends = [];
+//   return client
+//     .query(QUERY)
+//     .toPromise()
+//     .then((d) => {
+//       return {
+//         props: { friends: d.data?.friend },
+//       };
+//     })
+//     .catch((e) => {
+//       return {
+//         props: {},
+//       };
+//     });
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // let friends = [];
-  return client
-    .query(QUERY)
-    .toPromise()
-    .then((d) => {
-      return {
-        props: { friends: d.data?.friend },
-      };
-    })
-    .catch((e) => {
-      return {
-        props: {},
-      };
-    });
+  try {
+    const result = await client.query(QUERY, {}).toPromise(); // Pass an empty object if no variables are needed
 
+    return {
+      props: { friends: result.data?.friend || [] }, // Ensure that friends is always an array
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      props: { friends: [] }, // Return an empty array in case of an error
+    };
+  }
+};
   // try {
   //   const res = await fetch(process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string, {
   //     method: 'POST',
@@ -70,7 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // } catch (error) {
   //   console.error('Error fetching data:', error);
   // }
-};
+
 
 export default function Home({
   friends,
