@@ -1,5 +1,6 @@
 import Image from "next/image";
 import localFont from "next/font/local";
+
 import { GetServerSideProps } from "next";
 import { client } from "../utils/client";
 import {
@@ -7,6 +8,7 @@ import {
   GetFriendsQuery,
   GetFriendsQueryVariables,
 } from "@/generated/graphql";
+import Link from "next/link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -54,68 +56,49 @@ export default function Home({ friends }: Props) {
   const friendsList = Array.isArray(friends) ? friends : [];
 
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <h1 className="text-2xl font-bold">Friends List</h1>
-        <ul>
+    <div>
+      <article className="prose mb-12 border-4 p-5 rounded-md border-slate-100 bg-green-200 shadow-lg hover:bg-green-300">
+        <h1 className="text-4xl font-bold ">
+          Welcome to our Pizza Ordering App!
+          <br />
+          The number one place for backyard
+          <br />
+          pizza with YOUR friends.
+        </h1>
+        <p className="mt-4">
+          If you&apos;re new here, you probably need to{" "}
+          <Link className="text-blue-500 underline" href="/login">
+            Signup or Login
+          </Link>
+          , or you need to scan a party code to get going!
+        </p>
+      </article>
+      <main className="flex flex-col gap-8 items-center sm:items-start">
+        <h2 className="font-bold text-3xl text-green-900">
+          Pizza Loving Patrons Include:
+        </h2>
+        <ul className="flex flex-row sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {friendsList.length > 0 ? (
             friendsList.map((friend) => (
-              <li key={friend.id}>{friend.name}</li>
+              <li
+                className="bg-green-200 rounded-md text-center p-10 shadow-lg hover:bg-green-300 transition-colors duration-200 ease-in-out"
+                key={friend.id}
+              >
+                <span className="text-2xl font-semibold">{friend.name}</span>
+              </li>
             ))
           ) : (
             <li>No friends found</li>
           )}
+
+          <li className="bg-blue-200 rounded-md text-center p-10 shadow-lg hover:bg-blue-300 transition-colors duration-200 ease-in-out">
+            <Link href="/login">
+              You? <br />
+              <span className="text-lg text-blue-800">Join the party!</span>
+            </Link>
+          </li>
         </ul>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
