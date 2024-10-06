@@ -6,7 +6,7 @@ const INTENTIONS = {
   SIGNUP: "signup",
 };
 
-type Props = {};
+type Props = object;
 
 const shouldLogin = (intention: string) => intention === INTENTIONS.LOGIN;
 const shouldSignup = (intention: string) => intention === INTENTIONS.SIGNUP;
@@ -17,7 +17,7 @@ const Signup = () => {
   const [password, setPassword] = React.useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     signup(name, password);
   };
 
@@ -57,7 +57,7 @@ const Login = () => {
   const [name, setName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     login(name, password);
   };
   return (
