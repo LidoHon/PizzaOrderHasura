@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
-import {client} from "../../../utils/client";
+import { client } from "../../../utils/client";
 import { generateJWT } from "../../../utils/jwt";
 
 import {
@@ -33,7 +33,9 @@ export default async function handler(
         if (!friend)
           return res.status(400).json({ message: "Something went wrong" });
 
-        const validPassword =friend.password ? await bcrypt.compare(password, friend.password) : false
+        const validPassword = friend.password
+          ? await bcrypt.compare(password, friend.password)
+          : false;
         if (!validPassword) return res.status(401).send({ message: "Invalid" });
 
         const token = generateJWT({
@@ -49,7 +51,7 @@ export default async function handler(
         });
       }
     })
-    .catch((e: any) => {
+    .catch((e: Error) => {
       console.log("server error");
       return res.status(400).json({ code: e.name, message: e.message });
     });

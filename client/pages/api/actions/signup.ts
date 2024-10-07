@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       }
     })
-    .catch((e: any) => {
+    .catch((e: Error) => {
       console.log("server error");
       return res.status(400).json({ code: e.name, message: e.message });
     });
