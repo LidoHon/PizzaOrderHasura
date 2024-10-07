@@ -1,7 +1,9 @@
 import React from "react";
-
+import { useStore } from "../store/store";
 const Header = () => {
+  const user= useStore(store => store).user;
   return (
+   
     <div className="navbar bg-base-100">
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">
@@ -24,6 +26,8 @@ const Header = () => {
       <a className="btn btn-ghost text-xl">Lido&apos;s Pizza</a>
 
       </div>
+      <p>{user?.username && user.username
+        }</p>
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">
           <svg

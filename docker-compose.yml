@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -28,7 +28,17 @@ services:
       # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       ## uncomment next line to set an admin secret
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-      HASURA_GRAPHQL_METADATA_DEFAULTS: '${HASURA_GRAPHQL_METADATA_DEFAULTS}'
+      HASURA_GRAPHQL_METADATA_DEFAULTS: "${HASURA_GRAPHQL_METADATA_DEFAULTS}"
+      HASURA_JWT_SECRET_TYPE: HS256
+      # HASURA_JWT_SECRET_KEY: "${HASURA_JWT_SECRET_KEY}"
+      HASURA_JWT_SECRET_KEY: my-beautiful-cat-disappeared-three-months-ago
+      # ACTION_BASE_HANDLER: "${ACTION_BASE_HANDLER}"
+      # ACTION_BASE_HANDLER: http://host.docker.internal:3000
+      ACTION_BASE_HANDLER: http://172.17.0.1:3000
+      HASURA_GRAPHQL_JWT_SECRET: '{ "key":"my-beautiful-cat-disappeared-three-months-ago", "type":"HS256" }'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      HASURA_GRAPHQL_UNAUTHORIZED: anonymous
+
     depends_on:
       data-connector-agent:
         condition: service_healthy

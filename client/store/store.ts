@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
+import {Login, LoginMutation, LoginMutationVariables, Signup, SignupMutation, SignupMutationVariables} from '../generated/graphql'
+import {client} from '../utils/client'
 
 export enum Auth {
     AUTHED = 'authed',
@@ -9,9 +11,9 @@ export enum Auth {
 type LocalUser = {
     authed: Auth;
     id?: string;
-    token?: string;
-    username?: string;
-    email?: string;
+    token?: string | null;
+    username?: string | null;
+    // email?: string;
 }
 
 interface HasuraDemo {
@@ -32,6 +34,22 @@ const useStore = create<HasuraDemo>()(
                 },
                 signup: (username: string,  password: string) => {
                     console.log("signing up  user",username, password) 
+                    client.mutation<SignupMutation, SignupMutationVariables>(Signup, {
+                        username,
+                        password,
+                    }).toPromise().then((result) => {
+                        if (result?.error) {
+                            console.log("Error signing up", result.error.graphQLErrors);
+                            return;
+                        }else {
+                            if (result?.data?.signup) {
+
+                                const {token, id, username} = result.data.signup;
+                                set({user: {authed: Auth.AUTHED, id, token: token ?? '', username: username ?? ''}})
+                        }
+                    }
+                        
+                    })
                 },
                 login: (username: string, password: string) => {
                    console.log("logging in user",username, password) 

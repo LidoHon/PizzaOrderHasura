@@ -23,7 +23,7 @@ const geistMono = localFont({
 });
 
 type Friend = {
-  name: string;
+  username: string;
 };
 
 type Data = {
@@ -84,7 +84,9 @@ export default function Home({ friends }: Props) {
                 className="bg-green-200 rounded-md text-center p-10 shadow-lg hover:bg-green-300 transition-colors duration-200 ease-in-out"
                 key={friend.id}
               >
-                <span className="text-2xl font-semibold">{friend.name}</span>
+                <span className="text-2xl font-semibold">
+                  {friend.username}
+                </span>
               </li>
             ))
           ) : (

@@ -6,7 +6,7 @@ import {
 } from "@urql/core";
 import { withUrqlClient } from "next-urql";
 import { createClient as createWSClient } from "graphql-ws";
-import { ExchangeIO, createClient } from "urql";
+import { ExchangeIO, createClient, Client } from "urql";
 
 const isServerSide = typeof window === "undefined";
 
@@ -25,8 +25,7 @@ const wsClient = () =>
       return isServerSide
         ? {
             headers: {
-              "x-hasura-admin-secret": process.env
-                .HASURA_ADMIN_SECRET as string,
+              "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
             },
           }
         : {};
@@ -70,8 +69,10 @@ const clientConfig = {
   exchanges: [cacheExchange, fetchExchange, subscribeOrNoopExchange()],
 };
 
-export const client = createClient(clientConfig);
+// Exporting the client for direct use in API routes
+export const client: Client = createClient(clientConfig);
 
+// For wrapping Next.js pages with URQL client
 export default withUrqlClient((ssrExchange) => {
   const exchanges = [
     cacheExchange,
@@ -82,6 +83,5 @@ export default withUrqlClient((ssrExchange) => {
   return {
     url: clientConfig.url,
     exchanges,
-    ...client,
   };
 });
