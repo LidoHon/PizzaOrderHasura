@@ -16,3 +16,33 @@ array_relationships:
         table:
           name: pizza_topping_pizza
           schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      set:
+        original_friend: x-hasura-user-id
+      columns:
+        - id
+        - title
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - original_friend
+        - title
+      filter: {}
+      limit: 20
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - title
+      filter:
+        original_friend:
+          _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

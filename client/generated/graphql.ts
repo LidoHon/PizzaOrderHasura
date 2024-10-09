@@ -14,7 +14,6 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   timestamptz: { input: any; output: any; }
-  uuid: { input: any; output: any; }
 };
 
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
@@ -32,7 +31,7 @@ export type Boolean_Comparison_Exp = {
 
 export type FriendOutput = {
   __typename?: 'FriendOutput';
-  id?: Maybe<Scalars['uuid']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
   password?: Maybe<Scalars['String']['output']>;
   token?: Maybe<Scalars['String']['output']>;
   username?: Maybe<Scalars['String']['output']>;
@@ -2315,7 +2314,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'mutation_root', login?: { __typename?: 'FriendOutput', username?: string | null, token?: string | null, id?: any | null } | null };
+export type LoginMutation = { __typename?: 'mutation_root', login?: { __typename?: 'FriendOutput', username?: string | null, token?: string | null, id?: number | null } | null };
 
 export type SignupMutationVariables = Exact<{
   username: Scalars['String']['input'];
@@ -2323,7 +2322,7 @@ export type SignupMutationVariables = Exact<{
 }>;
 
 
-export type SignupMutation = { __typename?: 'mutation_root', signup?: { __typename?: 'FriendOutput', username?: string | null, token?: string | null, id?: any | null } | null };
+export type SignupMutation = { __typename?: 'mutation_root', signup?: { __typename?: 'FriendOutput', username?: string | null, token?: string | null, id?: number | null } | null };
 
 
 export const InsertFriendOne = gql`

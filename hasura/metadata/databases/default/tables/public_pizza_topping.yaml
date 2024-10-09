@@ -9,3 +9,19 @@ array_relationships:
         table:
           name: pizza_topping_pizza
           schema: public
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - emoji
+        - title
+    comment: ""
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - available
+        - emoji
+        - title
+    comment: ""
